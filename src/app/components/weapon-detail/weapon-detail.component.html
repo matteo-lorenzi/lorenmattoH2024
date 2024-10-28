@@ -1,0 +1,61 @@
+<div *ngIf="weapon">
+  <h2>{{ weapon.name | uppercase }} Details</h2>
+
+  <form [formGroup]="weaponForm" (ngSubmit)="save()">
+    <div>
+      <label for="weapon-name">weapon name: </label>
+      <input id="weapon-name" formControlName="name" placeholder="name" />
+    </div>
+
+    <div>
+      <label for="weapon-attack">weapon attack: </label>
+      <input
+        id="weapon-attack"
+        type="number"
+        formControlName="attack"
+        placeholder="attack"
+      />
+    </div>
+
+    <div>
+      <label for="weapon-dodge">weapon dodge: </label>
+      <input
+        id="weapon-dodge"
+        type="number"
+        formControlName="dodge"
+        placeholder="dodge"
+      />
+    </div>
+
+    <div>
+      <label for="weapon-damage">weapon damage: </label>
+      <input
+        id="weapon-damage"
+        type="number"
+        formControlName="damage"
+        placeholder="damage"
+      />
+    </div>
+
+    <div>
+      <label for="weapon-hp">weapon hp: </label>
+      <input
+        id="weapon-hp"
+        type="number"
+        formControlName="hp"
+        placeholder="hp"
+      />
+    </div>
+
+    <div id="remaining-points">
+      <span id="remainingPoints">remaining points: </span
+      >{{ getRemainingPoints() }}
+    </div>
+
+    <button type="submit" [disabled]="!isValid()">Submit</button>
+  </form>
+
+  <button (click)="goBack()">Back</button>
+  <button id="deletebtn" (click)="delete()">Delete</button>
+</div>
+<app-message></app-message>

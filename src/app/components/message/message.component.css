@@ -1,0 +1,43 @@
+.message-container {
+    position: fixed;           /* Fix the position to stay visible */
+    bottom: 20px;              /* Slightly above the bottom of the screen */
+    left: 50%;                 /* Center the message horizontally */
+    transform: translateX(-50%);
+    background-color: rgba(0, 123, 255, 0.9);  /* Add a semi-transparent blue background */
+    color: white;              /* White text for contrast */
+    padding: 10px 20px;        /* Some padding around the message */
+    border-radius: 8px;        /* Rounded corners for a modern look */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);  /* Subtle shadow for depth */
+    font-size: 16px;           /* Readable font size */
+    max-width: 90%;            /* Ensure the message doesn’t overflow the screen */
+    z-index: 1000;             /* Ensure the message stays above other content */
+    animation: fadeInOut 4s ease-in-out; /* Smooth fade in/out animation */
+    text-align: center;        /* Center the message text */
+  }
+  
+  @keyframes fadeInOut {
+    0% {
+      opacity: 0;
+      transform: translateX(-50%) translateY(10px);
+    }
+    10% {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    90% {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(-50%) translateY(10px);
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .message-container {
+      font-size: 14px;  /* Adjust font size for smaller screens */
+      padding: 8px 16px;
+    }
+  }
+  

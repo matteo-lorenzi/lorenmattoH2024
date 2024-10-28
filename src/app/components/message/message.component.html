@@ -1,0 +1,6 @@
+<div *ngIf="messageService.messages.length" class="message-container">
+    <div *ngFor="let message of messageService.messages">
+      {{ message }}
+    </div>
+  </div>
+  

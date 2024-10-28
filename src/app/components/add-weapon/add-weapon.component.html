@@ -1,0 +1,33 @@
+<div>
+    <form [formGroup]="addWeaponForm" (ngSubmit)="save()">
+      <div>
+        <label for="name">Name</label>
+        <input id="name" formControlName="name" />
+      </div>
+      <div>
+        <label for="attack">Attack</label>
+        <input id="attack" formControlName="attack" type="number" />
+      </div>
+      <div>
+        <label for="dodge">Dodge</label>
+        <input id="dodge" formControlName="dodge" type="number" />
+      </div>
+      <div>
+        <label for="damage">Damage</label>
+        <input id="damage" formControlName="damage" type="number" />
+      </div>
+      <div>
+        <label for="hp">HP</label>
+        <input id="hp" formControlName="hp" type="number" />
+      </div>
+      <div id="remaining-points">
+        <span id="remainingPoints">Remaining points: </span
+        >{{ getRemainingPoints() }}
+      </div>
+  
+      <button type="submit" [disabled]="!isValid()">Submit</button>
+    </form>
+    <button (click)="goBack()">Back</button>
+    <app-message></app-message>
+  </div>
+  

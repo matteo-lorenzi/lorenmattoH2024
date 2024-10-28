@@ -1,0 +1,49 @@
+<div *ngIf="hero">
+  <h2>{{ hero.name | uppercase }} Details</h2>
+
+  <form [formGroup]="heroForm">
+    <div>
+      <label for="name">Hero name:</label>
+      <input id="name" type="text" formControlName="name" />
+    </div>
+
+    <div>
+      <label for="attack">Hero attack:</label>
+      <input id="attack" type="number" formControlName="attack" min="1" />
+    </div>
+
+    <div>
+      <label for="dodge">Hero dodge:</label>
+      <input id="dodge" type="number" formControlName="dodge" min="1" />
+    </div>
+
+    <div>
+      <label for="damage">Hero damage:</label>
+      <input id="damage" type="number" formControlName="damage" min="1" />
+    </div>
+
+    <div>
+      <label for="hp">Hero hp:</label>
+      <input id="hp" type="number" formControlName="hp" min="1" />
+    </div>
+
+    <div>
+      <label for="weapon">Weapon:</label>
+      <select id="weapon" formControlName="weapon">
+        <option [ngValue]="null">No weapon</option>
+        <option *ngFor="let weapon of weapons" [ngValue]="weapon.id">
+          {{ weapon.name }}
+        </option>
+      </select>
+    </div>
+
+    <div id="remaining-points">
+      <span>Remaining points: </span>
+      <span id="remainingPoints">{{ getRemainingPoints() }}</span>
+    </div>
+
+    <button type="submit" (click)="save()">Submit</button>
+  </form>
+  <button type="button" (click)="goBack()">Back</button>
+  <button id="deletebtn" type="button" (click)="delete()">Delete</button>
+</div>

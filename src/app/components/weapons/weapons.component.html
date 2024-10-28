@@ -1,0 +1,11 @@
+<h2>My Weapons</h2>
+<ul class="weapons">
+  <li *ngFor="let weapon of weapons">
+    <button type="button" (click)="goToDetail(weapon.id)">
+      <span class="badge">{{ weapon.id }}</span>
+      <span class="name">{{ weapon.name }}</span>
+    </button>
+  </li>
+</ul>
+
+<app-weapon-detail [weapon]="selectedWeapon"></app-weapon-detail>
