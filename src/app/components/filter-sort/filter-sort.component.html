@@ -1,0 +1,91 @@
+<div class="filters-container">
+  <div class="filters-header">
+    <h3>Filtres et tri</h3>
+  </div>
+
+  <div class="filters-grid">
+    <!-- Section des filtres -->
+    <div class="filters-section">
+      <div class="filter-groups">
+        <div class="filter-group" *ngFor="let filter of filterConfig">
+          <label [for]="filter.field">{{ filter.label }}</label>
+
+          <ng-container [ngSwitch]="filter.type">
+            <!-- Input pour texte -->
+            <input
+              *ngSwitchCase="'text'"
+              [id]="filter.field"
+              type="text"
+              [(ngModel)]="filterValues[filter.field]"
+              (ngModelChange)="onFilterChange()"
+              class="filter-input"
+              [placeholder]="'Rechercher par ' + filter.label.toLowerCase()"
+            />
+
+            <!-- Input pour nombre -->
+            <input
+              *ngSwitchCase="'number'"
+              [id]="filter.field"
+              type="number"
+              [(ngModel)]="filterValues[filter.field]"
+              (ngModelChange)="onFilterChange()"
+              class="filter-input"
+              [placeholder]="'Valeur minimum'"
+            />
+
+            <!-- Select pour les options -->
+            <select
+              *ngSwitchCase="'select'"
+              [id]="filter.field"
+              [(ngModel)]="filterValues[filter.field]"
+              (ngModelChange)="onFilterChange()"
+              class="filter-select"
+            >
+              <option value="">Tous</option>
+              <option *ngFor="let option of filter.options" [value]="option">
+                {{ option }}
+              </option>
+            </select>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section du tri -->
+    <div class="sort-section">
+      <div class="sort-group">
+        <label for="sortField">Trier par</label>
+        <select
+          id="sortField"
+          [(ngModel)]="sortField"
+          (ngModelChange)="onSortChange()"
+          class="sort-select"
+        >
+          <option value="">Aucun tri</option>
+          <option *ngFor="let field of sortableFields" [value]="field.value">
+            {{ field.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="sort-group">
+        <label for="sortOrder">Ordre</label>
+        <select
+          id="sortOrder"
+          [(ngModel)]="sortOrder"
+          (ngModelChange)="onSortChange()"
+          class="sort-order-select"
+        >
+          <option value="asc">Ascendant</option>
+          <option value="desc">Descendant</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="filters-footer">
+    <button class="reset-button" (click)="resetFilters()">
+      Réinitialiser les filtres
+    </button>
+  </div>
+</div>

@@ -6,6 +6,8 @@ import {
   doc,
   getDoc,
   getDocs,
+  limit,
+  query,
   setDoc,
 } from '@angular/fire/firestore';
 import { Observable, from } from 'rxjs';
@@ -36,7 +38,7 @@ export class HeroService {
             data['dodge'],
             data['damage'],
             data['hp'],
-            data['weaponId'] || null  // Récupération de l'ID de l'arme
+            data['weaponId'] || null // Récupération de l'ID de l'arme
           );
         });
       })
@@ -60,7 +62,7 @@ export class HeroService {
             data['dodge'],
             data['damage'],
             data['hp'],
-            data['weaponId'] || null  // Récupération de l'ID de l'arme
+            data['weaponId'] || null // Récupération de l'ID de l'arme
           );
         } else {
           return undefined;
@@ -81,7 +83,7 @@ export class HeroService {
       dodge: hero.dodge,
       damage: hero.damage,
       hp: hero.hp,
-      weaponId: hero.weaponId  // Sauvegarde de l'ID de l'arme
+      weaponId: hero.weaponId, // Sauvegarde de l'ID de l'arme
     });
   }
 
@@ -97,7 +99,7 @@ export class HeroService {
         dodge: hero.dodge,
         damage: hero.damage,
         hp: hero.hp,
-        weaponId: hero.weaponId  // Sauvegarde de l'ID de l'arme
+        weaponId: hero.weaponId, // Sauvegarde de l'ID de l'arme
       });
     } catch (error) {
       console.error('Error updating hero: ', error);
@@ -105,10 +107,13 @@ export class HeroService {
     }
   }
 
-
   // Supprime un le document du héros de la base de données
   async deleteHero(id: number): Promise<void> {
-    const heroDocRef = doc(this.firestore, HeroService.collectionName, id.toString());
+    const heroDocRef = doc(
+      this.firestore,
+      HeroService.collectionName,
+      id.toString()
+    );
     await deleteDoc(heroDocRef);
   }
 
@@ -121,5 +126,29 @@ export class HeroService {
     const querySnapshot = await getDocs(heroesCollection);
     const lastHero = querySnapshot.docs[querySnapshot.docs.length - 1];
     return Number(lastHero.id);
+  }
+
+  getTopHeroes(): Observable<HeroInterface[]> {
+    const heroesCollection = collection(
+      this.firestore,
+      HeroService.collectionName
+    );
+    const topHeroesQuery = query(heroesCollection, limit(4));
+    return from(getDocs(topHeroesQuery)).pipe(
+      map((querySnapshot) => {
+        return querySnapshot.docs.map((doc) => {
+          const data = doc.data();
+          return new HeroInterface(
+            Number(doc.id),
+            data['name'],
+            data['attack'],
+            data['dodge'],
+            data['damage'],
+            data['hp'],
+            data['weaponId'] || null
+          );
+        });
+      })
+    );
   }
 }

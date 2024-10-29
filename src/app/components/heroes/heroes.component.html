@@ -1,12 +1,26 @@
-<h2>My Heroes</h2>
-<ul class="heroes">
-  <li *ngFor="let hero of heroes">
-    <button type="button" (click)="goToDetail(hero.id)">
-      <span class="badge">{{ hero.id }}</span>
-      <span class="name">{{ hero.name }}</span>
-    </button>
-  </li>
-</ul>
+<div class="heroes-container">
+  <h2>Héros</h2>
 
-<app-hero-detail  [hero]="selectedHero"></app-hero-detail>
+  <app-filter-sort
+    [filterConfig]="filterConfig"
+    [sortableFields]="sortableFields"
+    (filterChange)="onFilterChange($event)"
+    (sortChange)="onSortChange($event)"
+  >
+  </app-filter-sort>
 
+  <ul class="heroes">
+    <li *ngFor="let hero of filteredHeroes">
+      <button type="button" (click)="goToDetail(hero.id)">
+        <span class="badge">{{ hero.id }}</span>
+        <span class="name">{{ hero.name | uppercase }}</span>
+        <div class="hero-stats">
+          <span class="stat">ATT: {{ hero.attack }}</span>
+          <span class="stat">DEF: {{ hero.dodge }}</span>
+          <span class="stat">DMG: {{ hero.damage }}</span>
+          <span class="stat">HP: {{ hero.hp }}</span>
+        </div>
+      </button>
+    </li>
+  </ul>
+</div>

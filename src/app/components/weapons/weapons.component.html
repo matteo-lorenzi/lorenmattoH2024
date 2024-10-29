@@ -1,11 +1,26 @@
-<h2>My Weapons</h2>
-<ul class="weapons">
-  <li *ngFor="let weapon of weapons">
-    <button type="button" (click)="goToDetail(weapon.id)">
-      <span class="badge">{{ weapon.id }}</span>
-      <span class="name">{{ weapon.name }}</span>
-    </button>
-  </li>
-</ul>
+<div class="weapons-container">
+  <h2>Héros</h2>
 
-<app-weapon-detail [weapon]="selectedWeapon"></app-weapon-detail>
+  <app-filter-sort
+    [filterConfig]="filterConfig"
+    [sortableFields]="sortableFields"
+    (filterChange)="onFilterChange($event)"
+    (sortChange)="onSortChange($event)"
+  >
+  </app-filter-sort>
+
+  <ul class="weapons">
+    <li *ngFor="let weapon of filteredWeapons">
+      <button type="button" (click)="goToDetail(weapon.id)">
+        <span class="badge">{{ weapon.id }}</span>
+        <span class="name">{{ weapon.name | uppercase }}</span>
+        <div class="weapon-stats">
+          <span class="stat">ATT: {{ weapon.attack }}</span>
+          <span class="stat">DEF: {{ weapon.dodge }}</span>
+          <span class="stat">DMG: {{ weapon.damage }}</span>
+          <span class="stat">HP: {{ weapon.hp }}</span>
+        </div>
+      </button>
+    </li>
+  </ul>
+</div>
