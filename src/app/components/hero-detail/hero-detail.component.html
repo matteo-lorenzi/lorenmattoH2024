@@ -42,7 +42,9 @@
       <span id="remainingPoints">{{ getRemainingPoints() }}</span>
     </div>
 
-    <button type="submit" (click)="save()">Submit</button>
+    <button type="submit" [disabled]="!isValid()" (click)="save()">
+      Submit
+    </button>
   </form>
   <button type="button" (click)="goBack()">Back</button>
   <button id="deletebtn" type="button" (click)="delete()">Delete</button>

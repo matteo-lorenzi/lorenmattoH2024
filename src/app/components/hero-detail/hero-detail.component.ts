@@ -35,6 +35,7 @@ export class HeroDetailComponent implements OnInit {
 
   // Base stats pour le héros (utilisées pour réinitialiser après changement d'arme)
   baseStats = { attack: 0, dodge: 0, damage: 0, hp: 0 };
+  private updatingForm = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -55,15 +56,14 @@ export class HeroDetailComponent implements OnInit {
       weapon: [null],
     });
 
-    this.subscribeToStatsChanges();
-    this.subscribeToWeaponChanges();
+    // Souscrire aux changements une seule fois lors de l'initialisation
+    this.subscribeToFormChanges();
   }
 
   ngOnInit(): void {
     this.initializeForm();
     this.loadWeapons();
     this.getHero();
-    this.subscribeToWeaponChanges();
   }
 
   private getHero(): void {
@@ -71,7 +71,8 @@ export class HeroDetailComponent implements OnInit {
     this.heroService.getHero(id).subscribe((hero) => {
       if (hero) {
         this.hero = hero;
-        // Mettre à jour baseStats avant de patcher le form
+
+        // Sauvegarder les stats de base initiales
         this.baseStats = {
           attack: hero.attack,
           dodge: hero.dodge,
@@ -79,6 +80,8 @@ export class HeroDetailComponent implements OnInit {
           hp: hero.hp,
         };
 
+        // Mettre à jour le formulaire sans déclencher les souscriptions
+        this.updatingForm = true;
         this.heroForm.patchValue({
           name: hero.name,
           attack: hero.attack,
@@ -87,28 +90,45 @@ export class HeroDetailComponent implements OnInit {
           hp: hero.hp,
           weapon: hero.weaponId,
         });
+        this.updatingForm = false;
 
-        // Initialiser les souscriptions après le chargement des données
-        this.subscribeToStatsChanges();
-        this.subscribeToWeaponChanges();
-
+        // Charger l'arme si elle existe
         if (hero.weaponId && this.weapons.length > 0) {
           this.selectedWeapon = this.weapons.find(
             (w) => w.id === hero.weaponId
           );
           if (this.selectedWeapon) {
-            this.applyWeaponStats();
+            // Soustraire les bonus d'arme des stats de base
+            this.updateBaseStatsWithoutWeapon();
           }
         }
       }
     });
   }
 
-  private subscribeToStatsChanges(): void {
+  private updateBaseStatsWithoutWeapon(): void {
+    if (this.selectedWeapon) {
+      this.baseStats = {
+        attack: this.baseStats.attack - (this.selectedWeapon.attack || 0),
+        dodge: this.baseStats.dodge - (this.selectedWeapon.dodge || 0),
+        damage: this.baseStats.damage - (this.selectedWeapon.damage || 0),
+        hp: this.baseStats.hp - (this.selectedWeapon.hp || 0),
+      };
+    }
+  }
+
+  private subscribeToFormChanges(): void {
+    // Souscrire aux changements de stats basiques
     ['attack', 'dodge', 'damage', 'hp'].forEach((stat) => {
       this.heroForm.get(stat)?.valueChanges.subscribe((value) => {
-        if (value !== null && value >= 1) {
-          this.baseStats[stat as keyof typeof this.baseStats] = value;
+        if (!this.updatingForm && value !== null && value >= 1) {
+          // Mettre à jour les stats de base
+          const weaponBonus = this.selectedWeapon
+            ? (this.selectedWeapon[stat as keyof WeaponInterface] as number) || 0
+            : 0;
+          this.baseStats[stat as keyof typeof this.baseStats] =
+            value - weaponBonus;
+
           if (this.hero) {
             this.hero[
               stat as keyof Pick<
@@ -120,50 +140,50 @@ export class HeroDetailComponent implements OnInit {
         }
       });
     });
+
+    // Souscrire aux changements d'arme
+    this.heroForm.get('weapon')?.valueChanges.subscribe((weaponId) => {
+      if (!this.updatingForm) {
+        this.handleWeaponChange(weaponId);
+      }
+    });
   }
 
-  private subscribeToWeaponChanges(): void {
-    console.log('subscribeToWeaponChanges');
-    this.heroForm.get('weapon')?.valueChanges.subscribe((weaponId) => {
-      this.handleWeaponChange(weaponId);
+  private handleWeaponChange(weaponId: number | null): void {
+    const previousWeapon = this.selectedWeapon;
+    this.selectedWeapon = this.weapons.find((w) => w.id === weaponId);
+
+    this.updatingForm = true;
+    const totalStats = this.calculateTotalStats();
+
+    // Mettre à jour le formulaire avec les nouvelles stats totales
+    this.heroForm.patchValue({
+      attack: totalStats.attack,
+      dodge: totalStats.dodge,
+      damage: totalStats.damage,
+      hp: totalStats.hp,
     });
+
+    if (this.hero) {
+      Object.assign(this.hero, totalStats);
+    }
+
+    this.updatingForm = false;
+  }
+
+  private calculateTotalStats() {
+    return {
+      attack: this.baseStats.attack + (this.selectedWeapon?.attack || 0),
+      dodge: this.baseStats.dodge + (this.selectedWeapon?.dodge || 0),
+      damage: this.baseStats.damage + (this.selectedWeapon?.damage || 0),
+      hp: this.baseStats.hp + (this.selectedWeapon?.hp || 0),
+    };
   }
 
   private loadWeapons(): void {
     this.weaponService.getWeapons().subscribe((weapons) => {
       this.weapons = weapons;
     });
-  }
-
-  private handleWeaponChange(weaponId: number | null): void {
-    this.resetToBaseStats();
-    if (weaponId) {
-      this.selectedWeapon = this.weapons.find((w) => w.id === weaponId);
-      this.applyWeaponStats();
-    }
-  }
-
-  private resetToBaseStats(): void {
-    this.heroForm.patchValue(this.baseStats);
-  }
-
-  private applyWeaponStats(): void {
-    console.log('applyWeaponStats');
-    if (this.selectedWeapon && this.hero) {
-      const newStats = this.calculateStatsWithWeapon(this.selectedWeapon);
-      this.heroForm.patchValue(newStats);
-
-      Object.assign(this.hero, newStats); // Met à jour le héros
-    }
-  }
-
-  private calculateStatsWithWeapon(weapon: WeaponInterface) {
-    return {
-      attack: this.baseStats.attack + (weapon.attack || 0),
-      dodge: this.baseStats.dodge + (weapon.dodge || 0),
-      damage: this.baseStats.damage + (weapon.damage || 0),
-      hp: this.baseStats.hp + (weapon.hp || 0),
-    };
   }
 
   getRemainingPoints(): number {
