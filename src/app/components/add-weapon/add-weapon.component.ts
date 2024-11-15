@@ -42,7 +42,7 @@ export class AddWeaponComponent {
     return totalPoints;
   }
   goBack() {
-    window.history.back();
+    this.router.navigate(['/weapons']);
   }
 
   async getLastId(): Promise<number> {

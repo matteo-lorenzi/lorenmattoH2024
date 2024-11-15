@@ -1,10 +1,10 @@
-<h2>Top Heroes</h2>
-<ul class="heroes">
-  <li *ngFor="let hero of topHeroes">
-    <button type="button" (click)="goToDetail(hero.id)">
-      <span class="badge">{{ hero.id }}</span>
-      <span class="name">{{ hero.name }}</span>
+<h2>Top Heroes 🏆</h2>
+<div class="heroes-bento">
+  <div *ngFor="let hero of topHeroes" class="hero-card">
+    <button type="button" (click)="goToDetail(hero.id)" class="hero-button">
+      <div class="hero-badge">{{ hero.id }}</div>
+      <div class="hero-name">{{ hero.name }}</div>
     </button>
-  </li>
-</ul>
-<p *ngIf="topHeroes.length === 0">No heroes found.</p>
+  </div>
+</div>
+<p *ngIf="topHeroes.length === 0" class="no-heroes">No heroes found.</p>

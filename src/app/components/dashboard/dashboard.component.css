@@ -1,97 +1,65 @@
-/* General styles */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    color: #333;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-/* Container */
-div[ngIf] {
-    width: 50%;
-    max-width: 600px;
-    padding: 20px;
-    background-color: #fff;
+.heroes-bento {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+  
+  .hero-card {
+    background: #f9f9f9;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-}
-
-/* Headings */
-h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #007bff;
-    text-align: center;
-}
-
-/* Heroes list */
-ul.heroes {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-ul.heroes li {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .hero-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  .hero-button {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-ul.heroes li:hover {
-    background-color: #f0f0f0;
-    transform: translateY(-2px);
-}
-
-ul.heroes li button {
-    background: none;
-    border: none;
-    color: #333;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
+    justify-content: center;
+    padding: 16px;
     width: 100%;
-    padding: 0;
-    text-align: left;
-}
-
-ul.heroes li button:focus {
-    outline: none;
-}
-
-ul.heroes li .badge {
-    background-color: #007bff;
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    margin-right: 10px;
-}
-
-ul.heroes li .name {
-    font-size: 16px;
-    color: #333;
-}
-
-/* Message component */
-app-message {
-    margin-top: 20px;
+    height: 100%;
+    border: none;
+    background: none;
+    cursor: pointer;
     text-align: center;
-    color: #555;
-}
-
-/* Hero detail component */
-app-hero-detail {
-    margin-top: 20px;
-}
+  }
+  
+  .hero-button:hover {
+    background: #f1f1f1;
+  }
+  
+  .hero-badge {
+    font-size: 1.2em;
+    font-weight: bold;
+    background: #007bff;
+    color: #fff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+  
+  .hero-name {
+    font-size: 1em;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .no-heroes {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 1.2em;
+    color: #666;
+  }
+  

@@ -47,7 +47,7 @@ export class AddHeroeComponent implements OnInit {
     return 40 - totalPoints;
   }
   goBack() {
-    window.history.back();
+    this.router.navigate(['/heroes']);
   }
 
   async getLastId(): Promise<number> {

@@ -1,32 +1,33 @@
 <div>
   <form [formGroup]="addheroForm" (ngSubmit)="save()">
     <div>
-      <label for="name">Name</label>
+      <h1>Ajouter un Héro 🗿</h1>
+      <label for="name">Nom</label>
       <input id="name" formControlName="name" />
     </div>
     <div>
-      <label for="attack">Attack</label>
+      <label for="attack">Attaque</label>
       <input id="attack" formControlName="attack" type="number" />
     </div>
     <div>
-      <label for="dodge">Dodge</label>
+      <label for="dodge">Esquive</label>
       <input id="dodge" formControlName="dodge" type="number" />
     </div>
     <div>
-      <label for="damage">Damage</label>
+      <label for="damage">Dégat</label>
       <input id="damage" formControlName="damage" type="number" />
     </div>
     <div>
-      <label for="hp">HP</label>
+      <label for="hp">Vie</label>
       <input id="hp" formControlName="hp" type="number" />
     </div>
     <div id="remaining-points">
-      <span id="remainingPoints">Remaining points: </span
+      <span id="remainingPoints">Points restant : </span
       >{{ getRemainingPoints() }}
     </div>
 
-    <button type="submit" [disabled]="!isValid()">Submit</button>
+    <button type="submit" [disabled]="!isValid()">Ajouter votre héro</button>
   </form>
-  <button (click)="goBack()">Back</button>
+  <button (click)="goBack()">Retour</button>
   <app-message></app-message>
 </div>
