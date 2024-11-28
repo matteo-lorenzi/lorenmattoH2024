@@ -191,7 +191,7 @@ export class HeroDetailComponent implements OnInit {
   }
 
   isValid(): boolean {
-    return this.hero?.isValid() ?? false;
+    return this.heroForm.valid && (this.hero?.isValid() ?? false);
   }
 
   goBack(): void {
